@@ -16,7 +16,7 @@ class App extends Component {
     return (
       <BrowserRouter>
         <div className="App">
-          <Navbar title="Home" />
+          <Navbar title="Home" id="1" name="zouhair" />
           <Provider>
             <Routes>
               <Route exact path="/" element={<Contacts />} />

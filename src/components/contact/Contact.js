@@ -2,28 +2,33 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Consumer } from '../context';
 import './contact.css';
+import axios from 'axios';
 
 class Contact extends Component {
   state = {
     showContactToggle: true,
   };
 
-  showContact = (user) => {
-    console.log();
+  showContact = () => {
     this.setState({
       showContactToggle: !this.state.showContactToggle,
     });
   };
 
   delete = (id, dispatch) => {
-    dispatch({
-      type: 'DELETE_CONTACT',
-      payload: id,
-    });
+    axios
+      .delete('https://jsonplaceholder.typicode.com/users/' + id)
+      .then((res) =>
+        dispatch({
+          type: 'DELETE_CONTACT',
+          payload: id,
+        })
+      )
+      .catch((err) => console.log('aucun results'));
   };
 
   render() {
-    const { id, name, tel, email } = this.props.data;
+    const { id, name, phone, email } = this.props.data;
     return (
       <Consumer>
         {(value) => {
@@ -46,7 +51,7 @@ class Contact extends Component {
                 <div className="card-text">
                   {this.state.showContactToggle ? (
                     <ul className="list-group">
-                      <li className="list-group-item">{tel}</li>
+                      <li className="list-group-item">{phone}</li>
                       <li className="list-group-item">{email}</li>
                     </ul>
                   ) : null}

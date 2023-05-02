@@ -3,12 +3,13 @@ import PropTypes from 'prop-types';
 import { Consumer } from '../context';
 import TextInputGroupe from '../helpers/TextInputGroupe';
 import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
 // import context from 'react-bootstrap/esm/AccordionContext';
 
 const AddContact = () => {
   const [state, setState] = useState({
     name: '',
-    tel: '',
+    phone: '',
     email: '',
     errors: {},
   });
@@ -17,7 +18,7 @@ const AddContact = () => {
 
   const { contacts, dispatch } = useContext(Consumer);
 
-  const { name, tel, email, errors } = state;
+  const { name, phone, email, errors } = state;
 
   const onChangeInput = (e) =>
     setState({ ...state, [e.target.name]: e.target.value });
@@ -28,18 +29,23 @@ const AddContact = () => {
       setState({ ...state, errors: { name: 'the name is required' } });
       return;
     }
-    if (tel === '') {
-      setState({ ...state, errors: { tel: 'the tel is required' } });
+    if (phone === '') {
+      setState({ ...state, errors: { phone: 'the phone is required' } });
       return;
     }
     if (email === '') {
       setState({ ...state, errors: { email: 'the email is required' } });
       return;
     }
-    const id = contacts.length + 1;
-    const newContact = { id, name, tel, email };
-    dispatch({ type: 'ADD_CONTACT', payload: newContact });
-    setState({ name: '', tel: '', email: '', errors: {} });
+
+    const newContact = { name, phone, email };
+
+    axios
+      .post('https://jsonplaceholder.typicode.com/users', newContact)
+      .then((res) => dispatch({ type: 'ADD_CONTACT', payload: res.data }))
+      .catch((err) => console.log(err));
+
+    setState({ name: '', phone: '', email: '', errors: {} });
 
     navigate('/');
   };
@@ -62,11 +68,11 @@ const AddContact = () => {
             <TextInputGroupe
               label="Phone"
               type="numbre"
-              name="tel"
-              value={tel}
+              name="phone"
+              value={phone}
               changeInput={onChangeInput}
-              error={errors.tel}
-              placeholder="Entrer tel"
+              error={errors.phone}
+              placeholder="Entrer phone"
             />
             <TextInputGroupe
               label="Email"

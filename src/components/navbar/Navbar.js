@@ -5,7 +5,7 @@ import { Link } from 'react-router-dom';
 import './navbarc.css';
 
 const Navbar = (props) => {
-  const { title } = props;
+  const { title, id, name } = props;
 
   return (
     <nav className="navbar navbar-expand-sm navbar-light bg-secondary">
@@ -19,6 +19,7 @@ const Navbar = (props) => {
           </Link>
         </li>
         <li className="nav-item active">
+          {/* // todo : choof kifach t'ajouti id ou name fe to li kayena fe link */}
           <Link className="nav-link" to="/about">
             About
           </Link>
