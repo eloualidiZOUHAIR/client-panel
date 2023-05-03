@@ -11,14 +11,19 @@ const AddContact = () => {
     name: '',
     phone: '',
     email: '',
-    errors: {},
+  });
+
+  const [errors, setErrors] = useState({
+    error: {},
   });
 
   const navigate = useNavigate();
 
   const { contacts, dispatch } = useContext(Consumer);
 
-  const { name, phone, email, errors } = state;
+  const { name, phone, email } = state;
+
+  const { error } = errors;
 
   const onChangeInput = (e) =>
     setState({ ...state, [e.target.name]: e.target.value });
@@ -26,15 +31,15 @@ const AddContact = () => {
   const submit = (e) => {
     e.preventDefault();
     if (name === '') {
-      setState({ ...state, errors: { name: 'the name is required' } });
+      setErrors({ error: { name: 'the name is required' } });
       return;
     }
     if (phone === '') {
-      setState({ ...state, errors: { phone: 'the phone is required' } });
+      setErrors({ error: { phone: 'the phone is required' } });
       return;
     }
     if (email === '') {
-      setState({ ...state, errors: { email: 'the email is required' } });
+      setErrors({ error: { email: 'the email is required' } });
       return;
     }
 
@@ -45,7 +50,9 @@ const AddContact = () => {
       .then((res) => dispatch({ type: 'ADD_CONTACT', payload: res.data }))
       .catch((err) => console.log(err));
 
-    setState({ name: '', phone: '', email: '', errors: {} });
+    setState({ name: '', phone: '', email: '' });
+
+    setErrors({ error: {} });
 
     navigate('/');
   };
@@ -62,7 +69,7 @@ const AddContact = () => {
               name="name"
               value={name}
               changeInput={onChangeInput}
-              error={errors.name}
+              error={error.name}
               placeholder="Entrer nom"
             />
             <TextInputGroupe
@@ -71,7 +78,7 @@ const AddContact = () => {
               name="phone"
               value={phone}
               changeInput={onChangeInput}
-              error={errors.phone}
+              error={error.phone}
               placeholder="Entrer phone"
             />
             <TextInputGroupe
@@ -80,7 +87,7 @@ const AddContact = () => {
               name="email"
               value={email}
               changeInput={onChangeInput}
-              error={errors.email}
+              error={error.email}
               placeholder="Entrer email"
             />
             <br />

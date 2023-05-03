@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { Consumer } from '../context';
 import './contact.css';
 import axios from 'axios';
+import { Link } from 'react-router-dom';
 
 class Contact extends Component {
   state = {
@@ -15,16 +16,19 @@ class Contact extends Component {
     });
   };
 
-  delete = (id, dispatch) => {
-    axios
-      .delete('https://jsonplaceholder.typicode.com/users/' + id)
-      .then((res) =>
-        dispatch({
-          type: 'DELETE_CONTACT',
-          payload: id,
-        })
-      )
-      .catch((err) => console.log('aucun results'));
+  delete = async (id, dispatch) => {
+    try {
+      const res = await axios.delete(
+        `https://jsonplaceholder.typicode.com/users/${id}`
+      );
+
+      dispatch({
+        type: 'DELETE_CONTACT',
+        payload: id,
+      });
+    } catch (e) {
+      console.log(e);
+    }
   };
 
   render() {
@@ -42,6 +46,17 @@ class Contact extends Component {
                     style={{ cursor: 'pointer' }}
                     onClick={() => this.showContact('Zouhair')}
                     className="fa fa-sort-down"></i>
+                  <Link to={`/contact/edit/${id}`}>
+                    <i
+                      className="fa fa-pencil"
+                      style={{
+                        color: 'info',
+                        float: 'right',
+                        cursor: 'pointer',
+                        marginLeft: '8px',
+                      }}
+                      aria-hidden="true"></i>
+                  </Link>
                   <i
                     onClick={() => this.delete(id, dispatch)}
                     style={{ color: 'red', float: 'right', cursor: 'pointer' }}

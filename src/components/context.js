@@ -17,6 +17,14 @@ const reducer = (state, action) => {
       return {
         contacts: [...state.contacts, action.payload],
       };
+    case 'UPDATE_CONTACT':
+      return {
+        contacts: state.contacts.map((contact) =>
+          contact.id === action.payload.id
+            ? (contact = action.payload)
+            : contact
+        ),
+      };
     default:
       return state.contacts;
   }
@@ -32,18 +40,32 @@ class Provider extends Component {
     dispatch: (action) => this.setState((state) => reducer(state, action)),
   };
 
-  componentDidMount() {
-    axios
-      .get('https://jsonplaceholder.typicode.com/users')
-      //* La méthode then() est ensuite utilisée pour traiter la réponse renvoyée par la requête. Cette méthode prend une fonction de rappel qui est exécutée lorsque la réponse est disponible
-      .then((res) =>
-        this.setState({
-          contacts: res.data,
-        })
-      )
-      //* Si la requête échoue, la méthode catch() est appelée pour gérer l'erreur en consignant simplement l'erreur dans la console.
-      .catch((err) => console.log(err));
+  //*Pour traiter un promise:
+  //Method async and await:
+  async componentDidMount() {
+    try {
+      const res = await axios.get('https://jsonplaceholder.typicode.com/users');
+
+      this.setState({
+        contacts: res.data,
+      });
+    } catch (e) {
+      console.log(e);
+    }
   }
+  //Method then and catch:
+  // componentDidMount() {
+  //   axios
+  //     .get('https://jsonplaceholder.typicode.com/users')
+  //     //* La méthode then() est ensuite utilisée pour traiter la réponse renvoyée par la requête. Cette méthode prend une fonction de rappel qui est exécutée lorsque la réponse est disponible
+  //     .then((res) =>
+  //       this.setState({
+  //         contacts: res.data,
+  //       })
+  //     )
+  //     //* Si la requête échoue, la méthode catch() est appelée pour gérer l'erreur en consignant simplement l'erreur dans la console.
+  //     .catch((err) => console.log(err));
+  // }
 
   render() {
     return (
@@ -75,3 +97,16 @@ export { Provider, Consumer };
 //     }),
 //   }),
 // };
+
+// componentDidMount() {
+//   axios
+//     .get('https://jsonplaceholder.typicode.com/users')
+//     //* La méthode then() est ensuite utilisée pour traiter la réponse renvoyée par la requête. Cette méthode prend une fonction de rappel qui est exécutée lorsque la réponse est disponible
+//     .then((res) =>
+//       this.setState({
+//         contacts: res.data,
+//       })
+//     )
+//     //* Si la requête échoue, la méthode catch() est appelée pour gérer l'erreur en consignant simplement l'erreur dans la console.
+//     .catch((err) => console.log(err));
+// }

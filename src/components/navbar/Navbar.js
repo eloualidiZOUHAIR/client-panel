@@ -19,8 +19,7 @@ const Navbar = (props) => {
           </Link>
         </li>
         <li className="nav-item active">
-          {/* // todo : choof kifach t'ajouti id ou name fe to li kayena fe link */}
-          <Link className="nav-link" to="/about">
+          <Link className="nav-link" to={`/about/${id}/${name}`}>
             About
           </Link>
         </li>
